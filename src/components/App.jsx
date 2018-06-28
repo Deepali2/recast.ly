@@ -13,7 +13,10 @@ class App extends React.Component {
   }
 
   handleSelectEvent(e) {
-    console.log('hello');
+    // console.log(e.target.getAttribute('value'));
+    this.setState({
+      currentIndex: e.target.getAttribute('value')
+    });
   }
 
   render() {
@@ -30,7 +33,7 @@ class App extends React.Component {
             <VideoPlayer video={this.props.videos[this.state.currentIndex]}/>
           </div>
           <div className="col-md-5">
-            <VideoList videos={this.props.videos}/>
+            <VideoList videos={this.props.videos} eventHandlerFunction={this.handleSelectEvent.bind(this)}/>
           </div>
         </div>
       </div>
