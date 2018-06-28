@@ -3,13 +3,24 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      videos: props.videos,
+      videos: [{id: {videoId: ''}, snippet: {title: '', description: '', thumbnails: {default: {url: ''}}}}],
       currentIndex: 0
-    };
+    }; 
   }
 
-  onFetch() {
-    this.setState;
+  componentDidMount() {
+    this.props.searchYouTube({query: '', max: 5, key: window.YOUTUBE_API_KEY}, this.setVideoState.bind(this));
+  }
+
+  setVideoState(data) {
+    this.setState({
+      videos: data
+    });
+  }
+
+  fetch() {
+    let query = document.getElementById('searchField').value;
+    this.props.searchYouTube({query: query, max: 5, key: window.YOUTUBE_API_KEY}, this.setVideoState.bind(this));
   }
 
   handleSelectEvent(e) {
@@ -24,16 +35,16 @@ class App extends React.Component {
     return (
       <div>
         <nav className="navbar">
-          <div className="col-md-6 offset-md-3">
-            <Search />
+          <div className="col-md-6 offset-md-3" >
+            <Search fetch={this.fetch.bind(this)}/>
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <VideoPlayer video={this.props.videos[this.state.currentIndex]}/>
+            <VideoPlayer video={this.state.videos[this.state.currentIndex]}/>
           </div>
           <div className="col-md-5">
-            <VideoList videos={this.props.videos} eventHandlerFunction={this.handleSelectEvent.bind(this)}/>
+            <VideoList videos={this.state.videos} eventHandlerFunction={this.handleSelectEvent.bind(this)}/>
           </div>
         </div>
       </div>
